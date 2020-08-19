@@ -5,8 +5,7 @@
   "scripts": {
     "test": "echo \"No tests as of yet...\"",
     "start": "webpack-dev-server --config webpack.example.js",
-    "build": "webpack --config webpack.example.js",
-    "compile": "npx babel \"src\" --watch -d \"lib\""
+    "build": "webpack --config webpack.example.js"
   },
   "keywords": [],
   "author": "",
