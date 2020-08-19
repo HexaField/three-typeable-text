@@ -1,0 +1,25 @@
+{
+  "name": "three-typeable-text",
+  "version": "0.0.1",
+  "description": "Typable text for three.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.example.js",
+    "build": "webpack --config webpack.build.js",
+    "compile": "npx babel \"src\" --watch -d \"lib\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "three": "^0.119.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
