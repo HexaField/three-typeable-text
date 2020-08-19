@@ -1,9 +1,7 @@
 import * as THREE from 'three'
 import { ShapePath, MathUtils } from 'three'
 
-const MODULE_NAME = 'three-typeable-text'
-
-export default class ThreeTypeableText
+export default class ThreeEditableText
 {
     constructor(args = {})
     {
@@ -92,20 +90,30 @@ export default class ThreeTypeableText
         this.textMesh = this.createText()
     }
 
+    getText()
+    {
+        return this.string
+    }
+
+    getCursorIndex()
+    {
+        return this.cursorTextIndex
+    }
+
     updateCursor()
     {
-        if(this.isTyping)
+        if(!this.isTyping) return
+        
+        if(this.blinkingLastChange + this.blinkingFrequency < this.blinkingClock.getElapsedTime())
         {
-            if(this.blinkingLastChange + this.blinkingFrequency < this.blinkingClock.getElapsedTime())
-            {
-                this.makeCursorVisible(!this.cursorVisible)
-            }
+            this.makeCursorVisible(!this.cursorVisible)
         }
     }
 
     actionType(keyCode)
     {
-        this.string = [this.string.slice(0, this.cursorTextIndex), String.fromCharCode(keyCode), this.string.slice(this.cursorTextIndex)].join('')
+        if(!this.isTyping) return
+        this.string = [this.string.slice(0, this.cursorTextIndex), keyCode, this.string.slice(this.cursorTextIndex)].join('')
         this.createText()
         this.cursorTextIndex += 1
         this.refreshCursor()
@@ -113,6 +121,7 @@ export default class ThreeTypeableText
 
     actionBackspace()
     {
+        if(!this.isTyping) return
         if(this.cursorTextIndex >= this.letters.length - 1) return
         event.preventDefault()
         this.string = [this.string.slice(0, this.cursorTextIndex), this.string.slice(this.cursorTextIndex + 1)].join('')
@@ -122,6 +131,7 @@ export default class ThreeTypeableText
 
     actionDelete()
     {
+        if(!this.isTyping) return
         if(this.cursorTextIndex === 0) return
         event.preventDefault()
         this.string = [this.string.slice(0, this.cursorTextIndex - 1), this.string.slice(this.cursorTextIndex)].join('')
@@ -132,6 +142,7 @@ export default class ThreeTypeableText
 
     actionMoveCursor(amount)
     {
+        if(!this.isTyping) return
         this.cursorTextIndex += amount
         this.refreshCursor()
         this.makeCursorVisible(true)
@@ -139,7 +150,7 @@ export default class ThreeTypeableText
 
     actionClick(point)
     {
-        if(point)
+        if(point instanceof THREE.Vector3)
         {
             this.getCursorIndexByPoint(this.backgroundMesh.worldToLocal(point))
             this.refreshCursor()
@@ -171,7 +182,7 @@ export default class ThreeTypeableText
 
         if(this.string === undefined || typeof this.string !== 'string')
         {
-            console.error('Error in ' + MODULE_NAME + ' : text empty')
+            console.error('Error in three-typeable-text: invalid string')
             return
         }
 
@@ -308,22 +319,22 @@ export default class ThreeTypeableText
 
     onDocumentKeyDown(event)
     {
-        var keyCode = event.keyCode
-        if(keyCode == 8) // backspace
+        var keyCode = event.key
+        if(keyCode === 'Backspace') // backspace
         {
             this.actionDelete()
             return false
         }
-        if(keyCode == 46) // delete
+        if(keyCode === 'Delete') // delete
         {
             this.actionBackspace()
             return false
         }
-        if(keyCode == 37) // backspace
+        if(keyCode === 'ArrowLeft') // left arrow
         {
             this.actionMoveCursor(-1)
         }
-        if(keyCode == 39) // backspace
+        if(keyCode === 'ArrowRight') // right arrow
         {
             this.actionMoveCursor(1)
         }
@@ -331,16 +342,10 @@ export default class ThreeTypeableText
 
     onDocumentKeyPress(event)
     {
-        var keyCode = event.which
-        
-        if(keyCode == 8 || keyCode == 46) // backspace
-        {
-            event.preventDefault()
-        }
-        else
-        {
-            this.actionType(keyCode)
-        }
+        var keyCode = event.key
+        if(keyCode.length > 1) // not an character key
+            return false
+        this.actionType(keyCode)
     }
 
     // TODO

@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.0.1
+# The Three.js Typeable Text Library v0.1.0
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
@@ -59,11 +59,17 @@ Setting useDocumentListeners to false will require you to use the following func
 // Change the text
 textField.setText('New text!');
 
+// Returns the text
+textField.getText(); // returns 'New text!'
+
 // To access the text as an object use
 textField.getObject().position.setY(10)
 
 // Move the cursor 3 letters to the right
 textField.actionMoveCursor(3);
+
+// Returns the character index of the cursor
+textField.getCursorIndex(); // returns 3
 
 // Text will now display 'Ne text!'
 textField.actionBackspace();
@@ -79,9 +85,14 @@ textField.actionType('8');
 
 // Check to see if the user has clicked
 // This should run on your mouse click event
+
+// - supplying a valid point will move the cursor
+// - supplying an invalid point will defocus the text
+
 raycaster.setFromCamera(mouse, camera)
 var intersections = raycaster.intersectObject(textField.getObject())
-textField.actionClick(new THREE.Vector3( 3, 1, 0));
+textField.actionClick(intersections.length > 0 ? intersections[0].point : false);
+
 ```
 
 ## Planned Features:
@@ -98,7 +109,7 @@ API
 - text outline
   - thickness
   - dotted
-  - holed interior
+  - empty interior
 - extrusion & bevel
 - add onFocus / onUnFocus events
 
