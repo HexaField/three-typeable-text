@@ -4,7 +4,7 @@
   "description": "Typable text for three.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.example.js",
-    "build": "webpack --config webpack.build.js",
+    "build": "webpack --config webpack.example.js",
     "compile": "npx babel \"src\" --watch -d \"lib\""
   },
   "keywords": [],

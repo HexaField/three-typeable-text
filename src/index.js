@@ -3,7 +3,7 @@ import { ShapePath, MathUtils } from 'three'
 
 const MODULE_NAME = 'three-typeable-text'
 
-export default class ThreeEditableText
+export default class ThreeTypeableText
 {
     constructor(args = {})
     {

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-import ThreeEditableText from "../src"
+import ThreeTypeableText from "../src"
 
 var camera, scene, renderer, light, controls;
 
@@ -52,7 +52,7 @@ async function init()
     var fontLoader = new THREE.FontLoader();
     var font = await fontLoader.loadAsync('font/helvetiker.json');
 
-    var textField = new ThreeEditableText({
+    var textField = new ThreeTypeableText({
         camera: camera,
         font: font,
         string: 'Hello text!',

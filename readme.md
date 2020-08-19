@@ -2,13 +2,21 @@
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
+## Design:
+
+This is designed to be as simple as creating the ThreeTypeableText object, adding it to the scene, and optionally updating it to show the cursor. There is some basic functionality that should integrate with most project designs easily. You can find what is planned for this at the bottom.
+
+## Example:
+
+A live demo can be found [here](https://three-typeable-text.netlify.app/)
+
 ## Usage:
 ```javascript
 function init()
 {
     // ... initialise threejs
 
-    var textField = new ThreeEditableText({
+    var textField = new ThreeTypeableText({
         camera: camera,
         font: font,
         string: 'Hello text!'
