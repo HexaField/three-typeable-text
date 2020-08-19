@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import ThreeTypeableText from "../src"
+import ThreeTypeableText from "../"
 
 var camera, scene, renderer, light, controls;
 

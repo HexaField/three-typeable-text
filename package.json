@@ -1,5 +1,5 @@
 {
-  "name": "@hexafield/three-typeable-text",
+  "name": "three-typeable-text",
   "version": "0.0.0",
   "description": "Typeable text for three.js",
   "scripts": {
