@@ -1,13 +1,12 @@
 {
   "name": "@hexafield/three-typeable-text",
   "version": "0.0.0",
-  "description": "Typable text for three.js",
+  "description": "Typeable text for three.js",
   "scripts": {
     "test": "echo \"No tests as of yet...\"",
     "start": "webpack-dev-server --config webpack.example.js",
     "build": "webpack --config webpack.example.js",
-    "compile": "npx babel \"src\" --watch -d \"lib\"",
-    "publish": "npm publish --access public"
+    "compile": "npx babel \"src\" --watch -d \"lib\""
   },
   "keywords": [],
   "author": "",
