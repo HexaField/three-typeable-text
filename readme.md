@@ -83,6 +83,9 @@ textField.actionMoveCursor(-1);
 // Text will now display 'N8etext!'
 textField.actionType('8');
 
+// Get the text height
+textField.getLineHeight(); // depends on fontScale and the font itself
+
 // Check to see if the user has clicked
 // This should run on your mouse click event
 
@@ -112,7 +115,8 @@ API
   - empty interior
 - extrusion & bevel
 - add onFocus / onUnFocus events
+- formatting
+  - 
 
 INTERNALS:
 - generate letter by letter to not have to regenreate the whole string every time a letter is changed
-- fix alignment of multiple lines

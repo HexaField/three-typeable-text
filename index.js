@@ -13,7 +13,7 @@ export default class ThreeEditableText
         // settings
 
         this.string = args.string || ''
-        this.fontScale = 1
+        this.fontScale = args.fontScale === undefined ? 1 : args.fontScale
         this.material = args.material || new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })
         this.useDocumentListeners = args.useDocumentListeners === undefined ? true : args.useDocumentListeners
         this.align = args.align === undefined ? 'center' : args.align.toLowerCase()
@@ -27,7 +27,9 @@ export default class ThreeEditableText
 
         this.group = new THREE.Group()
         this.letters = new THREE.Group()
+        this.backgroundGroup = new THREE.Group()
         this.group.add(this.letters)
+        this.group.add(this.backgroundGroup)
         
         this.vec3 = new THREE.Vector3()
         
@@ -95,6 +97,11 @@ export default class ThreeEditableText
         return this.string
     }
 
+    getLineHeight()
+    {
+        return this.line_height
+    }
+
     getCursorIndex()
     {
         return this.cursorTextIndex
@@ -152,7 +159,7 @@ export default class ThreeEditableText
     {
         if(point instanceof THREE.Vector3)
         {
-            this.getCursorIndexByPoint(this.backgroundMesh.worldToLocal(point))
+            this.getCursorIndexByPoint(this.backgroundGroup.worldToLocal(point))
             this.refreshCursor()
             this.isTyping = true
             this.makeCursorVisible(true)
@@ -175,9 +182,14 @@ export default class ThreeEditableText
 
     createText()
     {
+        // remove previous text
         while(this.letters.children.length > 0)
         {
             this.letters.remove(this.letters.children[0])
+        }
+        while(this.backgroundGroup.children.length > 0)
+        {
+            this.backgroundGroup.remove(this.backgroundGroup.children[0])
         }
 
         if(this.string === undefined || typeof this.string !== 'string')
@@ -188,25 +200,39 @@ export default class ThreeEditableText
 
         const chars = Array.from ? Array.from( this.string ) : String( this.string ).split( '' ) // workaround for IE11, see #13988
 
+        // taken from THREE.Font
         const scale = this.fontScale / this.font.data.resolution
         this.line_height = ( this.font.data.boundingBox.yMax - this.font.data.boundingBox.yMin + this.font.data.underlineThickness ) * scale
 
-        let offsetX = 0, offsetY = 0, biggestX = 0
+        let offsetX = 0, offsetY = 0, biggestX = 0, lineWidths = []
 
-        for ( let i = 0; i < chars.length; i ++ )
+        for (let char of chars)
         {
-            const char = chars[ i ]
-            if ( char === '\n' )
+            if (char === '\n')
             {
+                // create a background for previous line
+                let backgroundGeo = new THREE.PlaneBufferGeometry(biggestX, this.line_height)
+                backgroundGeo.translate(0, offsetY + this.line_height / 2, 0)
+                let backgroundMesh = new THREE.Mesh(backgroundGeo, this.backgroundMaterial)
+                this.backgroundGroup.add(backgroundMesh)
+
+                // create mock object for new line
+                let obj = new THREE.Object3D()
+                obj.userData.offset = { x: offsetX, y: offsetY, width: 0, height: this.line_height }
+                this.letters.add(obj)
+
+                lineWidths.push(offsetX)
                 offsetX = 0
-                offsetY -= this.line_height
+                offsetY -= this.line_height        
             }
             else
             {
+                // clone of THREE.Font
                 const ret = this.createPath(char, scale, offsetX, offsetY, this.font.data)
                 
                 let geometry = new THREE.ShapeBufferGeometry(ret.path.toShapes())
                 let mesh = new THREE.Mesh(geometry, this.material)
+                // userdata is used to save metadata
                 mesh.userData.offset = { x: offsetX, y: offsetY, width: ret.offsetX, height: this.line_height }
 
                 this.letters.add(mesh)
@@ -217,19 +243,32 @@ export default class ThreeEditableText
                     biggestX = offsetX
             }
         }
+        // make one geometry for final line
+        let backgroundGeo = new THREE.PlaneBufferGeometry(biggestX, this.line_height)
+        backgroundGeo.translate(0, offsetY + this.line_height / 2, 0)
+        let backgroundMesh = new THREE.Mesh(backgroundGeo, this.backgroundMaterial)
+        this.backgroundGroup.add(backgroundMesh)
+        lineWidths.push(offsetX)
 
-        let backgroundGeo = new THREE.PlaneBufferGeometry(biggestX, (-offsetY + this.line_height))
-        backgroundGeo.translate(biggestX / 2, (-offsetY + this.line_height) / 2, 0)
-        this.backgroundMesh = new THREE.Mesh(backgroundGeo, this.backgroundMaterial)
-        this.group.add(this.backgroundMesh)
+        let line = 0, i = 0
+        
+        // do alignment
+        for(let char of chars)
+        {
+            if(this.align === 'center')
+            {
+                this.letters.children[i].position.setX(-lineWidths[line] / 2)
+                this.letters.children[i].userData.offset.x -= lineWidths[line] / 2
+            }
+            else if(this.align === 'right')
+            {
+                this.letters.children[i].position.setX(-lineWidths[line])
+                this.letters.children[i].userData.offset.x -= lineWidths[line]
+            }
 
-        if(this.align === 'center')
-        {
-            this.group.position.setX(-this.backgroundMesh.geometry.parameters.width / 2)
-        }
-        else if(this.align === 'right')
-        {
-            this.group.position.setX(-this.backgroundMesh.geometry.parameters.width)
+            if (char === '\n')
+                line++
+            i++
         }
     }
 
@@ -251,11 +290,7 @@ export default class ThreeEditableText
         if(this.cursorTextIndex > this.letters.children.length)
             this.cursorTextIndex = this.letters.children.length
         
-        if(this.cursorTextIndex === 0)
-        {
-            this.cursorMesh.position.set(0, 0, 0)
-        }
-        else if(this.cursorTextIndex >= this.letters.children.length)
+        if(this.cursorTextIndex >= this.letters.children.length)
         {
             let child = this.letters.children[this.letters.children.length - 1]
             this.cursorMesh.position.set(child.userData.offset.x + child.userData.offset.width, child.userData.offset.y, 0)
@@ -307,7 +342,7 @@ export default class ThreeEditableText
         event.preventDefault()
 
         this.raycaster.setFromCamera(this.mouse, this.camera)
-        let intersections = this.raycaster.intersectObject(this.backgroundMesh)
+        let intersections = this.raycaster.intersectObjects(this.backgroundGroup.children, true)
         this.actionClick(intersections.length > 0 ? intersections[0].point : false)
     }
 
@@ -328,6 +363,11 @@ export default class ThreeEditableText
         if(keyCode === 'Delete') // delete
         {
             this.actionBackspace()
+            return false
+        }
+        if(keyCode === 'Enter') // escape
+        {
+            this.actionClick()
             return false
         }
         if(keyCode === 'ArrowLeft') // left arrow

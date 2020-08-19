@@ -54,10 +54,12 @@ async function init()
     var textField = new ThreeTypeableText({
         camera: camera,
         font: font,
-        string: 'Hello text!',
+        string: 'Hello text!\nThree Typeable Text',
         material: new THREE.MeshNormalMaterial({ side: THREE.DoubleSide }),
         align: 'center',
     });
+
+    textField.group.position.setY(2)
     
     scene.add(textField.group);
     elements.push(textField);

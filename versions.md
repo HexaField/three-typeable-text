@@ -1,3 +1,9 @@
+# 0.1.1
+
+- 'enter' to remove focus
+- fixed fontScale option not working
+- fixed alignment issue on new lines
+
 # 0.1.0
 ## Features
 - adds typeable text boxes
