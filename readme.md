@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.1.1
+# The Three.js Typeable Text Library v0.1.2
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
@@ -116,7 +116,6 @@ API
 - extrusion & bevel
 - add onFocus / onUnFocus events
 - formatting
-  - 
 
 INTERNALS:
 - generate letter by letter to not have to regenreate the whole string every time a letter is changed

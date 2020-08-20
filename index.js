@@ -46,6 +46,7 @@ export default class ThreeEditableText
         this.createText()
         this.createCursor()
         this.makeCursorVisible(false)
+        this.refreshCursor()
 
         if(this.useDocumentListeners)
             this.addDocumentListeners()
@@ -89,7 +90,7 @@ export default class ThreeEditableText
     setText(text)
     {
         this.string = text
-        this.textMesh = this.createText()
+        this.createText()
     }
 
     getText()
@@ -155,6 +156,12 @@ export default class ThreeEditableText
         this.makeCursorVisible(true)
     }
 
+    actionFocus(focus)
+    {
+        this.isTyping = focus
+        this.makeCursorVisible(focus)
+    }
+
     actionClick(point)
     {
         if(point instanceof THREE.Vector3)
@@ -192,11 +199,7 @@ export default class ThreeEditableText
             this.backgroundGroup.remove(this.backgroundGroup.children[0])
         }
 
-        if(this.string === undefined || typeof this.string !== 'string')
-        {
-            console.error('Error in three-typeable-text: invalid string')
-            return
-        }
+        this.string = String(this.string)
 
         const chars = Array.from ? Array.from( this.string ) : String( this.string ).split( '' ) // workaround for IE11, see #13988
 

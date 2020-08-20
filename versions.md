@@ -1,3 +1,9 @@
+# 0.1.2
+
+- adds actionFocus function to give focus without having to supply a point
+- fixes visual bug with cursor position
+- invalid text is automatically stringified instead of throwing an error
+
 # 0.1.1
 
 - 'enter' to remove focus
