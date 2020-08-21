@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.1.2
+# The Three.js Typeable Text Library v0.1.3
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 

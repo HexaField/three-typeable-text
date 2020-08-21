@@ -1,3 +1,7 @@
+# 0.1.3
+
+- fixes bug with cursor position and empty string
+
 # 0.1.2
 
 - adds actionFocus function to give focus without having to supply a point

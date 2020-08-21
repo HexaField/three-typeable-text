@@ -293,7 +293,11 @@ export default class ThreeEditableText
         if(this.cursorTextIndex > this.letters.children.length)
             this.cursorTextIndex = this.letters.children.length
         
-        if(this.cursorTextIndex >= this.letters.children.length)
+        if(this.letters.children.length === 0)
+        {
+
+        }
+        else if(this.cursorTextIndex >= this.letters.children.length)
         {
             let child = this.letters.children[this.letters.children.length - 1]
             this.cursorMesh.position.set(child.userData.offset.x + child.userData.offset.width, child.userData.offset.y, 0)
