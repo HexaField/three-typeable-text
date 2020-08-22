@@ -1,3 +1,8 @@
+# 0.1.4
+
+- added onChange event
+- no longer regenerates text on delete action while at end of string
+
 # 0.1.3
 
 - fixes bug with cursor position and empty string

@@ -17,6 +17,7 @@ export default class ThreeEditableText
         this.material = args.material || new THREE.MeshBasicMaterial({ side: THREE.DoubleSide })
         this.useDocumentListeners = args.useDocumentListeners === undefined ? true : args.useDocumentListeners
         this.align = args.align === undefined ? 'center' : args.align.toLowerCase()
+        this.onChange = args.onChange
         
         // internals
 
@@ -121,8 +122,14 @@ export default class ThreeEditableText
     actionType(keyCode)
     {
         if(!this.isTyping) return
-        this.string = [this.string.slice(0, this.cursorTextIndex), keyCode, this.string.slice(this.cursorTextIndex)].join('')
-        this.createText()
+        
+        let newString = [this.string.slice(0, this.cursorTextIndex), keyCode, this.string.slice(this.cursorTextIndex)].join('')
+
+        if(this.onChange)
+            this.onChange(newString, 'Type', keyCode, this.cursorTextIndex)
+        
+        this.setText(newString)
+
         this.cursorTextIndex += 1
         this.refreshCursor()
     }
@@ -130,21 +137,31 @@ export default class ThreeEditableText
     actionBackspace()
     {
         if(!this.isTyping) return
-        if(this.cursorTextIndex >= this.letters.length - 1) return
-        event.preventDefault()
-        this.string = [this.string.slice(0, this.cursorTextIndex), this.string.slice(this.cursorTextIndex + 1)].join('')
-        this.createText()
+        if(this.cursorTextIndex === 0) return
+
+        let newString = [this.string.slice(0, this.cursorTextIndex - 1), this.string.slice(this.cursorTextIndex)].join('')
+        
+        if(this.onChange)
+            this.onChange(newString, 'Backspace', this.string[this.cursorTextIndex - 1], this.cursorTextIndex)
+        
+        this.setText(newString)
+        
+        this.cursorTextIndex -= 1
         this.refreshCursor()
     }
 
     actionDelete()
     {
         if(!this.isTyping) return
-        if(this.cursorTextIndex === 0) return
-        event.preventDefault()
-        this.string = [this.string.slice(0, this.cursorTextIndex - 1), this.string.slice(this.cursorTextIndex)].join('')
-        this.createText()
-        this.cursorTextIndex -= 1
+        if(this.cursorTextIndex >= this.letters.children.length) return
+
+        let newString = [this.string.slice(0, this.cursorTextIndex), this.string.slice(this.cursorTextIndex + 1)].join('')
+        
+        if(this.onChange)
+            this.onChange(newString, 'Delete', this.string[this.cursorTextIndex], this.cursorTextIndex)
+        
+        this.setText(newString)
+        
         this.refreshCursor()
     }
 
@@ -364,12 +381,12 @@ export default class ThreeEditableText
         var keyCode = event.key
         if(keyCode === 'Backspace') // backspace
         {
-            this.actionDelete()
+            this.actionBackspace()
             return false
         }
         if(keyCode === 'Delete') // delete
         {
-            this.actionBackspace()
+            this.actionDelete()
             return false
         }
         if(keyCode === 'Enter') // escape

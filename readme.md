@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.1.3
+# The Three.js Typeable Text Library v0.1.4
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
@@ -50,6 +50,8 @@ function updateCursor()
 **align** Shifts the text. (options: 'left', 'center', 'right', default: 'center') 
 
 **fontScale** Scales the geometry (default: 1)
+
+**onChange** A callback that is fired when the text changes internally
 
 ## API:
 

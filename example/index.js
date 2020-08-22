@@ -59,7 +59,10 @@ async function init()
         align: 'center',
     });
 
-    textField.group.position.setY(2)
+    textField.onChange = (newText, type, delta, position) => {
+        console.log(`New Text: ${newText}\nEvent Type: ${type}\nDelta: ${delta}\nPositiong in text: ${position}\n`);
+    }
+    textField.group.position.setY(2);
     
     scene.add(textField.group);
     elements.push(textField);
