@@ -60,7 +60,7 @@ async function init()
     });
 
     textField.onChange = (newText, type, delta, position) => {
-        console.log(`New Text: ${newText}\nEvent Type: ${type}\nDelta: ${delta}\nPositiong in text: ${position}\n`);
+        console.log(`New Text: ${newText}\nEvent Type: ${type}\nDelta: ${delta}\nPosition in text: ${position}\n`);
     }
     textField.group.position.setY(2);
     
