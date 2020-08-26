@@ -2,6 +2,9 @@
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
+Support me here https://ko-fi.com/joshfield
+Follow me here https://twitter.com/HexaField
+
 ## Design:
 
 This is designed to be as simple as creating the ThreeTypeableText object, adding it to the scene, and optionally updating it to show the cursor. There is some basic functionality that should integrate with most project designs easily. You can find what is planned for this at the bottom.
