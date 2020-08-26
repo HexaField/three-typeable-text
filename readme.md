@@ -131,7 +131,6 @@ API
   - dotted
   - empty interior
 - extrusion & bevel
-- add onFocus / onUnFocus events
 - formatting
 
 INTERNALS:
