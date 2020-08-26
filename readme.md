@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.1.4
+# The Three.js Typeable Text Library v0.1.5
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
@@ -25,13 +25,13 @@ function init()
     scene.add(textField.getObject())
 }
 
-function updateCursor()
+function animate()
 {
-    // ... logic loop
-
-    textField.updateCursor() // only used for displaying the cursor, not necessary for functionality
+    // ...
     
-    // ... render loop
+    textField.updateCursor() // only used for displaying the cursor, not necessary for functionality
+
+    // ...
 }
 ```
 
@@ -52,6 +52,8 @@ function updateCursor()
 **fontScale** Scales the geometry (default: 1)
 
 **onChange** A callback that is fired when the text changes internally
+
+**maxEditHistory** The number of copies of the string to put in edit history (default: 32)
 
 ## API:
 
@@ -85,13 +87,19 @@ textField.actionMoveCursor(-1);
 // Text will now display 'N8etext!'
 textField.actionType('8');
 
+// Will now display 'Ne text!'
+textField.actionUndo(2);
+
+// Will return 'Netext!'
+textField.actionRedo(1);
+
 // Get the text height
 textField.getLineHeight(); // depends on fontScale and the font itself
 
 // Check to see if the user has clicked
 // This should run on your mouse click event
 
-// - supplying a valid point will move the cursor
+// - supplying a valid THREE.Vector3 will move the cursor
 // - supplying an invalid point will defocus the text
 
 raycaster.setFromCamera(mouse, camera)
@@ -105,7 +113,6 @@ textField.actionClick(intersections.length > 0 ? intersections[0].point : false)
 API
 - mobile typing support
 - shift + arrows to make selection
-- shift + enter to make new line
 - control + c / v / x - copy cut paste
 - click and drag to make selection
 - control + arrows to jump words
@@ -121,3 +128,4 @@ API
 
 INTERNALS:
 - generate letter by letter to not have to regenreate the whole string every time a letter is changed
+- add & remove document listeners on focus & unfocus

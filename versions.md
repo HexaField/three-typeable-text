@@ -1,3 +1,10 @@
+# 0.1.5
+
+- adds ctrl/cmd + v for pasting from clipboard
+- adds ctrl/cmd + z / y for undo / redo
+- adds ctrl/cmd + enter for new line
+- internals now have underscore in name
+
 # 0.1.4
 
 - added onChange event

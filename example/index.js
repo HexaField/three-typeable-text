@@ -46,7 +46,7 @@ function initThree()
     scene.add(floor);
 }
 
-async function init()
+async function initTypeableText()
 {
     var fontLoader = new THREE.FontLoader();
     var font = await fontLoader.loadAsync('font/helvetiker.json');
@@ -62,9 +62,10 @@ async function init()
     textField.onChange = (newText, type, delta, position) => {
         console.log(`New Text: ${newText}\nEvent Type: ${type}\nDelta: ${delta}\nPosition in text: ${position}\n`);
     }
-    textField.group.position.setY(2);
+
+    textField.getObject().position.setY(2);
     
-    scene.add(textField.group);
+    scene.add(textField._group);
     elements.push(textField);
 }
 
@@ -95,5 +96,5 @@ function onWindowResize()
 }
 
 initThree()
-init();
+initTypeableText();
 render();
