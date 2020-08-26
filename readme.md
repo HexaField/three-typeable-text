@@ -1,4 +1,4 @@
-# The Three.js Typeable Text Library v0.1.5
+# The Three.js Typeable Text Library v0.1.6
 
 The intention of this library is to make creation and integration of typeable text elements seamless with threejs.
 
@@ -56,6 +56,8 @@ function animate()
 
 **onChange** A callback that is fired when the text changes internally
 
+**onFocus** A callback that is fired when the focus changes internally (true if gaining focus, false otherwise)
+
 **maxEditHistory** The number of copies of the string to put in edit history (default: 32)
 
 ## API:
@@ -95,6 +97,9 @@ textField.actionUndo(2);
 
 // Will return 'Netext!'
 textField.actionRedo(1);
+
+// Will stop all internal document listeners & hide the cursor
+textField.actionFocus(false);
 
 // Get the text height
 textField.getLineHeight(); // depends on fontScale and the font itself

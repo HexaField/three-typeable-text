@@ -15,6 +15,7 @@ export default class ThreeEditableText
         this.useDocumentListeners = args.useDocumentListeners === undefined ? true : args.useDocumentListeners
         this.align = args.align === undefined ? 'center' : args.align.toLowerCase()
         this.onChange = args.onChange
+        this.onFocus = args.onFocus
         this.maxEditHistory = args.maxEditHistory || 32
         
         // internals
@@ -199,11 +200,15 @@ export default class ThreeEditableText
             this._refreshCursor()
             this._isTyping = true
             this._makeCursorVisible(true)
+            if(this.onFocus)
+                this.onFocus(true)
         }
         else
         {
             this._isTyping = false
             this._makeCursorVisible(false)
+            if(this.onFocus)
+                this.onFocus(false)
         }
     }
 

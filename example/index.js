@@ -57,7 +57,17 @@ async function initTypeableText()
         string: 'Hello text!\nThree Typeable Text',
         material: new THREE.MeshNormalMaterial({ side: THREE.DoubleSide }),
         align: 'center',
+        onFocus: focusEvent
     });
+
+    function focusEvent(focus)
+    {
+        console.log('focusEvent')
+        if(focus)
+            textField.getObject().scale.set(1.2, 1.2, 1.2)
+        else
+            textField.getObject().scale.set(1, 1, 1)
+    }
 
     textField.onChange = (newText, type, delta, position) => {
         console.log(`New Text: ${newText}\nEvent Type: ${type}\nDelta: ${delta}\nPosition in text: ${position}\n`);

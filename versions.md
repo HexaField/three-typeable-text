@@ -1,3 +1,7 @@
+# 0.1.6
+
+- adds onFocus & onUnfocus events
+
 # 0.1.5
 
 - adds ctrl/cmd + v for pasting from clipboard
